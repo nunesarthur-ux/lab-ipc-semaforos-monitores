@@ -43,11 +43,16 @@ typedef struct {
 
 Buffer buffer = { .inicio = 0, .fim = 0, .contador = 0 };
 
+sem_t mutex; //exclusao mutua no acesso ao buffer
+sem_t vazio; //numero de posicoes livres no buffer
+sem_t cheio; //numero de posicoes preenchidas no buffer 
+
 /* TODO 0: declare aqui os semaforos necessarios.
  *   sem_t mutex;   -> exclusao mutua no acesso ao buffer
  *   sem_t vazio;   -> conta quantos espacos livres existem no buffer
  *   sem_t cheio;   -> conta quantos itens prontos para consumo existem
  */
+
 
 
 /* ---- Infraestrutura auxiliar de log/verificacao. NAO faz parte do
@@ -108,22 +113,24 @@ void *produtor(void *arg) {
     int id = *(int *) arg;
     for (int i = 0; i < ITENS_POR_PRODUTOR; i++) {
         int item = __sync_fetch_and_add(&proximo_id, 1);
-
         /* TODO 1: aguardar que haja espaco livre no buffer
-         *   sem_wait(&vazio);
-         */
-
+        *   sem_wait(&vazio);
+        */
+        sem_wait(&vazio);
+        
         /* TODO 2: entrar na secao critica
-         *   sem_wait(&mutex);
-         */
-
+        *   sem_wait(&mutex);
+        */
+        sem_wait(&mutex);
+        
         if (ATRASO_PRODUTOR_US > 0) usleep(ATRASO_PRODUTOR_US);
 
         inserir_item(item, id);
-
+        sem_post(&mutex);
         /* TODO 3: sair da secao critica
          *   sem_post(&mutex);
          */
+        sem_post(&cheio);
 
         /* TODO 4: sinalizar que ha um novo item disponivel para consumo
          *   sem_post(&cheio);
@@ -138,10 +145,12 @@ void *consumidor(void *arg) {
         /* TODO 5: aguardar que haja pelo menos um item disponivel
          *   sem_wait(&cheio);
          */
+        sem_wait(&cheio);
 
         /* TODO 6: entrar na secao critica
          *   sem_wait(&mutex);
          */
+        sem_wait(&mutex);
 
         if (ATRASO_CONSUMIDOR_US > 0) usleep(ATRASO_CONSUMIDOR_US);
 
@@ -150,10 +159,12 @@ void *consumidor(void *arg) {
         /* TODO 7: sair da secao critica
          *   sem_post(&mutex);
          */
+        sem_post(&mutex);
 
         /* TODO 8: sinalizar que uma vaga ficou livre no buffer
          *   sem_post(&vazio);
          */
+        sem_post(&vazio);
     }
     return NULL;
 }
@@ -167,6 +178,9 @@ int main(void) {
      *   sem_init(&vazio, 0, TAM_BUFFER); // comeca com todo o buffer livre
      *   sem_init(&cheio, 0, 0);          // comeca sem nenhum item pronto
      */
+    sem_init(&mutex, 0, 1);
+    sem_init(&vazio, 0, TAM_BUFFER);
+    sem_init(&cheio, 0, 0);
 
     for (int i = 0; i < N_PRODUTORES; i++) {
         ids_prod[i] = i;
