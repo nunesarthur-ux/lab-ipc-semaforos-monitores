@@ -32,7 +32,7 @@
  * do roteiro. Deixe os dois em 0 ate que o roteiro peça para alterar.
  * ------------------------------------------------------------- */
 #define ATRASO_PRODUTOR_US    500000
-#define ATRASO_CONSUMIDOR_US  0
+#define ATRASO_CONSUMIDOR_US  500000
 
 typedef struct {
     int dados[TAM_BUFFER];
@@ -126,7 +126,7 @@ void *produtor(void *arg) {
         if (ATRASO_PRODUTOR_US > 0) usleep(ATRASO_PRODUTOR_US);
 
         inserir_item(item, id);
-        sem_post(&mutex);
+        sem_post(&mutex); 
         /* TODO 3: sair da secao critica
          *   sem_post(&mutex);
          */
