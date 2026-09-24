@@ -31,7 +31,7 @@
  * Pontos de injecao de atraso, usados nos experimentos da Parte 2.4
  * do roteiro. Deixe os dois em 0 ate que o roteiro peça para alterar.
  * ------------------------------------------------------------- */
-#define ATRASO_PRODUTOR_US    0
+#define ATRASO_PRODUTOR_US    500000
 #define ATRASO_CONSUMIDOR_US  0
 
 typedef struct {
