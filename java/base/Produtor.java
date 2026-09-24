@@ -23,7 +23,7 @@ public class Produtor implements Runnable {
         for (int i = 0; i < quantidade; i++) {
             int item = proximoId.getAndIncrement();
             try {
-                if (ATRASO_MS > 0) Thread.sleep(ATRASO_MS);
+                //if (ATRASO_MS > 0) Thread.sleep(ATRASO_MS);
                 buffer.inserir(item);
                 System.out.println("[Produtor " + id + "] produziu item " + item);
             } catch (InterruptedException e) {

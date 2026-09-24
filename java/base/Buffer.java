@@ -35,7 +35,7 @@ public class Buffer {
          *       wait();
          *   }
          */
-
+        Thread.sleep(5000);
         dados[fim] = item;
         fim = (fim + 1) % capacidade;
         contador++;
