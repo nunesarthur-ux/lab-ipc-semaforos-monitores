@@ -24,7 +24,7 @@ public class Buffer {
 
     /* TODO 1: adicione o modificador 'synchronized' a este metodo. */
     public synchronized void inserir(int item) throws InterruptedException {
-        while (contador == capacidade) {
+        if (contador == capacidade) {
             wait();
         }
 
@@ -51,7 +51,7 @@ public class Buffer {
 
     /* TODO 4: adicione o modificador 'synchronized' a este metodo. */
     public synchronized int remover() throws InterruptedException {
-        while (contador == 0) {
+        if (contador == 0) {
             wait();
         }
 

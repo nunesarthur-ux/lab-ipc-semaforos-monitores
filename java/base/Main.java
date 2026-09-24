@@ -3,8 +3,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Main {
 
     static final int TAM_BUFFER         = 5;
-    static final int N_PRODUTORES       = 2;
-    static final int N_CONSUMIDORES     = 2;
+    static final int N_PRODUTORES       = 4;
+    static final int N_CONSUMIDORES     = 4;
     static final int ITENS_POR_PRODUTOR = 10;
     static final int TOTAL_ITENS        = N_PRODUTORES * ITENS_POR_PRODUTOR;
 
