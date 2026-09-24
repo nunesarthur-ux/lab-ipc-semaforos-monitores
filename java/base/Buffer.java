@@ -50,7 +50,7 @@ public class Buffer {
     }
 
     /* TODO 4: adicione o modificador 'synchronized' a este metodo. */
-    public int remover() throws InterruptedException {
+    public synchronized int remover() throws InterruptedException {
         while (contador == 0) {
             wait();
         }

@@ -2,7 +2,7 @@ public class Consumidor implements Runnable {
 
     /* Ponto de injecao de atraso (ver Parte 4.4 do roteiro).
      * Deixe em 0 ate que o roteiro peca para alterar. */
-    static final long ATRASO_MS = 0;
+    static final long ATRASO_MS = 500;
 
     private final Buffer buffer;
     private final int id;
