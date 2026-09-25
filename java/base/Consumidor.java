@@ -23,7 +23,7 @@ public class Consumidor implements Runnable {
     public void run() {
         for (int i = 0; i < quantidade; i++) {
             try {
-                if (ATRASO_MS > 0) Thread.sleep(ATRASO_MS);
+                //if (ATRASO_MS > 0) Thread.sleep(ATRASO_MS);
                 int item = buffer.remover();
                 System.out.println("[Consumidor " + id + "] consumiu item " + item);
 
