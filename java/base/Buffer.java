@@ -21,13 +21,9 @@ public class Buffer {
         this.capacidade = capacidade;
         this.dados = new int[capacidade];
     }
-}
 
     /* TODO 1: adicione o modificador 'synchronized' a este metodo. */
     public synchronized void inserir(int item) throws InterruptedException {
-        if (contador == capacidade) {
-            wait();
-        }
 
         /* TODO 2: enquanto o buffer estiver cheio, a thread produtora
          *         deve aguardar. Use um laco 'while' (nao 'if'!):
@@ -36,25 +32,26 @@ public class Buffer {
          *       wait();
          *   }
          */
-        Thread.sleep(5000);
+        while (contador == capacidade) {
+            wait();
+        }
+        Thread.sleep(500);
+
         dados[fim] = item;
         fim = (fim + 1) % capacidade;
         contador++;
         Buffer.verificarConsistencia(contador, capacidade);
-        notifyAll();
 
         /* TODO 3: avise as threads consumidoras que ha um novo item
          *         disponivel:
          *
          *   notifyAll();
          */
+        notifyAll();
     }
 
     /* TODO 4: adicione o modificador 'synchronized' a este metodo. */
     public synchronized int remover() throws InterruptedException {
-        if (contador == 0) {
-            wait();
-        }
 
         /* TODO 5: enquanto o buffer estiver vazio, a thread consumidora
          *         deve aguardar. Use um laco 'while' (nao 'if'!):
@@ -63,18 +60,20 @@ public class Buffer {
          *       wait();
          *   }
          */
-        Thread.sleep(5000);
+        while (contador == 0) {
+            wait();
+        }
+
         int item = dados[inicio];
         inicio = (inicio + 1) % capacidade;
         contador--;
         Buffer.verificarConsistencia(contador, capacidade);
-        notifyAll();
 
         /* TODO 6: avise as threads produtoras que uma vaga ficou livre:
          *
          *   notifyAll();
          */
-
+        notifyAll();
         return item;
     }
 
